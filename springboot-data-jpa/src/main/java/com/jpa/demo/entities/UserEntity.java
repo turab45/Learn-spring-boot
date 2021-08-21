@@ -1,4 +1,4 @@
-package com.jpa.entities;
+package com.jpa.demo.entities;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -7,12 +7,11 @@ import javax.persistence.Id;
 
 @Entity
 public class UserEntity {
-	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	private String name;
-	private String address;
+	private String city;
 	private String status;
 	public Integer getId() {
 		return id;
@@ -26,11 +25,11 @@ public class UserEntity {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getAddress() {
-		return address;
+	public String getCity() {
+		return city;
 	}
-	public void setAddress(String address) {
-		this.address = address;
+	public void setCity(String city) {
+		this.city = city;
 	}
 	public String getStatus() {
 		return status;
@@ -40,8 +39,7 @@ public class UserEntity {
 	}
 	@Override
 	public String toString() {
-		return "UserEntity [id=" + id + ", name=" + name + ", address=" + address + ", status=" + status + "]";
+		return "UserEntity [id=" + id + ", name=" + name + ", city=" + city + ", status=" + status + "]";
 	}
-	
 	
 }
