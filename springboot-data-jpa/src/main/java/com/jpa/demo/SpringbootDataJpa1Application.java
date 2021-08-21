@@ -1,5 +1,6 @@
 package com.jpa.demo;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.boot.SpringApplication;
@@ -45,9 +46,19 @@ public class SpringbootDataJpa1Application {
 		
 		// delete the record by id
 		
-		userRepository.deleteById(2);
+//		userRepository.deleteById(2);
+//		
+//		System.out.println("Deleted....");
 		
-		System.out.println("Deleted....");
+		// custom finder methods
+		
+		List<UserEntity> list = userRepository.findByCity("uk");
+		
+		list.forEach(user -> {
+			System.out.println(user);
+		});
+		
+		
 		
 		
 		
