@@ -52,11 +52,25 @@ public class SpringbootDataJpa1Application {
 		
 		// custom finder methods
 		
-		List<UserEntity> list = userRepository.findByCity("uk");
+//		List<UserEntity> list = userRepository.findByCity("uk");
+//		
+//		list.forEach(user -> {
+//			System.out.println(user);
+//		});
 		
+		
+		// JPQL
+//		List<UserEntity> list = userRepository.getAllUsers();		
+//		list.forEach(user -> {
+//			System.out.println(user);
+//		});
+		
+		List<UserEntity> list = userRepository.getUserByName("turab");		
 		list.forEach(user -> {
 			System.out.println(user);
 		});
+		
+		
 		
 		
 		
