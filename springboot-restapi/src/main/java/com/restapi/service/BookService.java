@@ -38,5 +38,17 @@ public class BookService {
 		books.add(book);
 		return book;
 	}
+	
+	public boolean deleteBook(Integer bookId) {
+		
+		for(int i=0; i<books.size(); i++) {
+			if(books.get(i).getId() == bookId) {
+				books.remove(i);
+				return true;
+			}
+		}	
+		
+		return false;
+	}
 
 }
