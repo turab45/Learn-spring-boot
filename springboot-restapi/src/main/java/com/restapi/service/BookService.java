@@ -46,6 +46,7 @@ public class BookService {
 	public BookEntity updateBook(BookEntity book, Integer id) {
 
 		BookEntity bookEntity = bookRepository.save(book);
+		
 		return bookEntity;
 
 	}
