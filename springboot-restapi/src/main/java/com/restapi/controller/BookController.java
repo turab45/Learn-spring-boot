@@ -36,7 +36,7 @@ public class BookController {
 	}
 	
 	
-	@GetMapping("/books/{id}")
+	@GetMapping("/book/{id}")
 	public ResponseEntity<BookEntity> getBook(@PathVariable("id") Integer id) {
 		
 		BookEntity entity = bookService.getBookById(id);
@@ -87,3 +87,4 @@ public class BookController {
 	}
 
 }
+

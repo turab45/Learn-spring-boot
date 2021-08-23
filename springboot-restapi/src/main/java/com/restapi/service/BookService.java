@@ -1,38 +1,31 @@
 package com.restapi.service;
 
-import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.restapi.dao.BookRepository;
 import com.restapi.entities.BookEntity;
 
 @Service
 public class BookService {
 
-	static List<BookEntity> books = new ArrayList<>();
-
-	static {
-		try {
-			books.add(new BookEntity(2, "Python", "Guido", 10));
-			books.add(new BookEntity(3, "Html", "hmul", 8));
-			books.add(new BookEntity(4, "Css", "Guhusido", 7));
-			books.add(new BookEntity(5, "JavaScript", "jonh", 3));
-			books.add(new BookEntity(6, "Spring boot", "bujie", 34));
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+	@Autowired
+	private BookRepository bookRepository;
 
 	public List<BookEntity> getAllBooks() {
-		return books;
+		List<BookEntity> iterator = (List<BookEntity>) this.bookRepository.findAll();
+		return iterator;
 	}
 
 	public BookEntity getBookById(Integer id) {
 		BookEntity b = null;
 		try {
-			b = books.stream().filter(e -> e.getId() == id).findFirst().get();
+			b = this.bookRepository.findById(id).get();
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -40,32 +33,20 @@ public class BookService {
 	}
 
 	public BookEntity addBook(BookEntity book) {
-		books.add(book);
-		return book;
+		BookEntity bookEntity = bookRepository.save(book);
+		return bookEntity;
 	}
 
-	public boolean deleteBook(Integer bookId) {
+	public String deleteBook(Integer bookId) {
 
-		for (int i = 0; i < books.size(); i++) {
-			if (books.get(i).getId() == bookId) {
-				books.remove(i);
-				return true;
-			}
-		}
-
-		return false;
+		bookRepository.deleteById(bookId);
+		return "deleted";
 	}
 
 	public BookEntity updateBook(BookEntity book, Integer id) {
 
-		for (int i = 0; i < books.size(); i++) {
-			if (books.get(i).getId() == id) {
-				book.setId(id);
-				books.set(i, book);
-				
-			}
-		}
-		return book;
+		BookEntity bookEntity = bookRepository.save(book);
+		return bookEntity;
 
 	}
 
