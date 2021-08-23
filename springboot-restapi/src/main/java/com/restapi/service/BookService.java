@@ -9,9 +9,9 @@ import com.restapi.entities.BookEntity;
 
 @Service
 public class BookService {
-	
+
 	static List<BookEntity> books = new ArrayList<>();
-	
+
 	static {
 		try {
 			books.add(new BookEntity(2, "Python", "Guido", 10));
@@ -24,31 +24,43 @@ public class BookService {
 			e.printStackTrace();
 		}
 	}
-	
-	public List<BookEntity> getAllBooks(){
+
+	public List<BookEntity> getAllBooks() {
 		return books;
 	}
-	
+
 	public BookEntity getBookById(Integer id) {
-		BookEntity b = books.stream().filter(e->e.getId()==id).findFirst().get();
+		BookEntity b = books.stream().filter(e -> e.getId() == id).findFirst().get();
 		return b;
 	}
-	
+
 	public BookEntity addBook(BookEntity book) {
 		books.add(book);
 		return book;
 	}
-	
+
 	public boolean deleteBook(Integer bookId) {
-		
-		for(int i=0; i<books.size(); i++) {
-			if(books.get(i).getId() == bookId) {
+
+		for (int i = 0; i < books.size(); i++) {
+			if (books.get(i).getId() == bookId) {
 				books.remove(i);
 				return true;
 			}
-		}	
-		
+		}
+
 		return false;
+	}
+
+	public BookEntity updateBook(BookEntity book, Integer id) {
+
+		for (int i = 0; i < books.size(); i++) {
+			if (books.get(i).getId() == id) {
+				books.set(i, book);
+				
+			}
+		}
+		return book;
+
 	}
 
 }
