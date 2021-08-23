@@ -30,7 +30,12 @@ public class BookService {
 	}
 
 	public BookEntity getBookById(Integer id) {
-		BookEntity b = books.stream().filter(e -> e.getId() == id).findFirst().get();
+		BookEntity b = null;
+		try {
+			b = books.stream().filter(e -> e.getId() == id).findFirst().get();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return b;
 	}
 
@@ -55,6 +60,7 @@ public class BookService {
 
 		for (int i = 0; i < books.size(); i++) {
 			if (books.get(i).getId() == id) {
+				book.setId(id);
 				books.set(i, book);
 				
 			}
