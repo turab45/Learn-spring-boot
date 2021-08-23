@@ -33,5 +33,10 @@ public class BookService {
 		BookEntity b = books.stream().filter(e->e.getId()==id).findFirst().get();
 		return b;
 	}
+	
+	public BookEntity addBook(BookEntity book) {
+		books.add(book);
+		return book;
+	}
 
 }
