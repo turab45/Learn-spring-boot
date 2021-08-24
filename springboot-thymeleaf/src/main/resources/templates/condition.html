@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8" />
+	<title>Conditions in thymeleaf</title>
+</head>
+<body>
+	
+<!-- 	condition? true: false -->
+	<h1>User is <span th:text="${isLoggedIn} ? 'Logged In': 'Not Logged in'"></span></h1>
+	
+	<h1 th:if="${gender} == 'M'">Male</h1>
+	<h1 th:unless="${gender} == 'M'">Female</h1>
+	
+	
+	<div th:switch="${#lists.size(myList)}">
+	
+		<h1 th:case="'0'">List has 0 elements</h1>
+		<h1 th:case="'1'">List has 2 elements</h1>
+		<h1 th:case="*">List has more than two elements</h1>
+	</div>
+	
+	
+	
+</body>
+</html>

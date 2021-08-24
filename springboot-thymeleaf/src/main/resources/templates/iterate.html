@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8" />
+	<title>Iteration in thymeleaf</title>
+</head>
+<body>
+	<h1>About page</h1>
+	<h2 th:text=${names}></h2>
+	
+	<ul>
+	<li th:each="n,status: ${names}">
+		<span th:text="${status.index}+' '+${n}"></span>
+	</li>
+	
+	</ul>
+</body>
+</html>
