@@ -10,6 +10,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 @Table(name = "books")
 public class BookEntity {
@@ -20,6 +22,7 @@ public class BookEntity {
 	private Integer noOfCopies;
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "author_id")
+	@JsonManagedReference
 	private AuthorEntity author;
 
 	

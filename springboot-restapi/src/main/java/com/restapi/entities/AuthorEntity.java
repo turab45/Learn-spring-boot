@@ -12,6 +12,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 @Table(name = "authors")
 public class AuthorEntity {
@@ -22,6 +24,7 @@ public class AuthorEntity {
 	private String name;
 	private Integer noOfCopies;
 	@OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
+	@JsonBackReference
 	private List<BookEntity> books;
 	
 	public Integer getId() {
@@ -42,16 +45,19 @@ public class AuthorEntity {
 	public void setNoOfCopies(Integer noOfCopies) {
 		this.noOfCopies = noOfCopies;
 	}
-	@Override
-	public String toString() {
-		return "AuthorEntity [id=" + id + ", name=" + name + ", noOfCopies=" + noOfCopies + "]";
-	}
+	
 	public List<BookEntity> getBooks() {
 		return books;
 	}
 	public void setBooks(List<BookEntity> books) {
 		this.books = books;
 	}
+	@Override
+	public String toString() {
+		return "AuthorEntity [id=" + id + ", name=" + name + ", noOfCopies=" + noOfCopies + ", books=" + books + "]";
+	}
+	
+	
 	
 	
 }
