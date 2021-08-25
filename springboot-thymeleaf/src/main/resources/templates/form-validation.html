@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We"
+	crossorigin="anonymous">
+
+</head>
+<body>
+
+	<div class="container">
+
+		<h1 class="text-center mt-5">Login</h1>
+
+		<form th:action="@{/process}" method="post" th:object="${loginData}"
+			class="container mt-5" style="width: 40%">
+			<div class="mb-3">
+				<label for="exampleInputEmail1" class="form-label">User Name</label>
+				<input type="text"
+					th:classappend="${#fields.hasErrors('userName') ? 'is-invalid' : ''} "
+					name="userName" th:value="${loginData.userName}"
+					class="form-control" id="exampleInputEmail1"
+					aria-describedby="emailHelp" />
+
+				<div th:each="e : ${#fields.errors('userName')}" th:text="${e}"  class="invalid-feedback"></div>
+
+			</div>
+
+			<div class="mb-3">
+				<label for="exampleInputEmail1" class="form-label">Email
+					address</label> <input type="email" name="email"
+					th:value="${loginData.email}" 
+					th:classappend="${#fields.hasErrors('email') ? 'is-invalid' : ''}"
+					class="form-control"
+					id="exampleInputEmail1" aria-describedby="emailHelp" />
+					
+					<div th:each="e : ${#fields.errors('email')}" th:text="${e}"  class="invalid-feedback"></div>
+
+			</div>
+
+
+			<div class="mb-3 form-check">
+				<input name="agreed" type="checkbox" class="form-check-input"
+				th:classappend="${#fields.hasErrors('agreed') ? 'is-invalid' : ''}"
+				 id="exampleCheck1" />
+				<label class="form-check-label" for="exampleCheck1">Agree terms & conditions.</label>
+				<div th:each="e : ${#fields.errors('agreed')}" th:text="${e}"  class="invalid-feedback"></div>
+			</div>
+			<div class="text-center">
+				<button type="submit" class="btn btn-primary">Login</button>
+			</div>
+		</form>
+	</div>
+
+</body>
+</html>

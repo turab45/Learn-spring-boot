@@ -5,10 +5,12 @@
 	<title>Footer</title>
 </head>
 <body>
-	<footer th:fragment="footer_fragment">
+	<footer th:fragment="footer_fragment(title,subtitle)">
 	
 	<div>
 		<h3>This is footer</h3>
+		<h3 th:text="${title}"></h3>
+		<h3 th:text="${subtitle}"></h3>
 		<p>It demonstrates the use of incldue in thymeleaf</p>
 	
 	</div>
