@@ -80,6 +80,12 @@ public class UserEntity {
 	public void setContacts(List<ContactEntity> contacts) {
 		this.contacts = contacts;
 	}
+
+	@Override
+	public String toString() {
+		return "UserEntity [id=" + id + ", name=" + name + ", email=" + email + ", password=" + password + ", image="
+				+ image + ", status=" + status + ", contacts=" + contacts + "]";
+	}
 	
 	
 	
