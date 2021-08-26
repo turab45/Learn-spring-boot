@@ -9,3 +9,7 @@
 	background-size: cover;
 	
 }
+
+.btn-link:hover {
+	color: #003153 !important;
+}
