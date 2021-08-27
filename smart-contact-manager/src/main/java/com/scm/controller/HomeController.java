@@ -22,10 +22,4 @@ public class HomeController {
 		return "about";
 	}
 	
-	@GetMapping("/register")
-	public String register(Model model) {
-		model.addAttribute("title", "Register");
-		model.addAttribute("user",new UserEntity());
-		return "register";
-	}
 }

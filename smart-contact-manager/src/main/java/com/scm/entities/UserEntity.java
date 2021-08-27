@@ -9,6 +9,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "USER")
@@ -16,11 +18,15 @@ public class UserEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
+	@NotBlank(message = "User name can't be null.")
 	private String name;
+	@Email(regexp = "^[A-Za-z0-9+_.-]+@(.+)$", message = "Must be a well formed email address.")
 	private String email;
+	@NotBlank(message = "Please provide a suitable password.")
 	private String password;
 	private String image;
 	private String status;
+	private String roll;
 	
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<ContactEntity> contacts;
@@ -81,11 +87,21 @@ public class UserEntity {
 		this.contacts = contacts;
 	}
 
+
+	public String getRoll() {
+		return roll;
+	}
+
+	public void setRoll(String roll) {
+		this.roll = roll;
+	}
+
 	@Override
 	public String toString() {
 		return "UserEntity [id=" + id + ", name=" + name + ", email=" + email + ", password=" + password + ", image="
-				+ image + ", status=" + status + ", contacts=" + contacts + "]";
+				+ image + ", status=" + status + ", roll=" + roll + ", contacts=" + contacts + "]";
 	}
+	
 	
 	
 	

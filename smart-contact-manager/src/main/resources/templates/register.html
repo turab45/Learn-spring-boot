@@ -18,22 +18,31 @@
 							<div class="card-body p-5">
 								<h2 class="text-uppercase text-center mb-5">Create an
 									account</h2>
-									
-								<div th:class="${'alert '+ alertClass}" role="alert" th:text="${message}"></div>
 
-								<form th:action="@{/register_user}" method="post"
+								<div th:class="${'alert '+ alertClass}" role="alert"
+									th:text="${message}"></div>
+
+								<form novalidate th:action="@{/register_user}" method="post"
 									th:object="${user}">
 
 									<div class="form-outline mb-4">
-										<input type="text" name="name" th:value="${user.name}"
-											id="form3Example1cg" class="form-control form-control-lg" />
+
+										<input type="text" class="form-control form-control-lg"
+											th:classappend="${#fields.hasErrors('name') ? 'is-invalid' : ''} "
+											th:value="${user.name}" name="name" id="form3Example1cg" />
+
+										<div th:each="e : ${#fields.errors('name')}" th:text="${e}"
+											class="invalid-feedback"></div>
 										<label class="form-label" for="form3Example1cg">Your
 											Name</label>
 									</div>
 
 									<div class="form-outline mb-4">
-										<input type="email" name="email" th:value="${user.email}"
-											id="form3Example3cg" class="form-control form-control-lg" />
+										<input type="email" class="form-control form-control-lg"
+											th:classappend="${#fields.hasErrors('email') ? 'is-invalid' : ''} "
+											name="email" th:value="${user.email}" id="form3Example3cg" />
+										<div th:each="e : ${#fields.errors('email')}" th:text="${e}"
+											class="invalid-feedback"></div>
 										<label class="form-label" for="form3Example3cg">Your
 											Email</label>
 									</div>
@@ -41,8 +50,11 @@
 									<div class="form-outline mb-4">
 										<input type="password" name="password"
 											th:value="${user.password}" id="form3Example4cg"
-											class="form-control form-control-lg" /> <label
-											class="form-label" for="form3Example4cg">Password</label>
+											class="form-control form-control-lg"
+											th:classappend="${#fields.hasErrors('password') ? 'is-invalid' : ''} " />
+										<div th:each="e : ${#fields.errors('password')}" th:text="${e}"
+											class="invalid-feedback"></div>
+										<label class="form-label" for="form3Example4cg">Password</label>
 									</div>
 
 									<div class="form-outline mb-4">
@@ -59,7 +71,7 @@
 											class="form-check-label" for="form2Example3g"> I
 											agree all statements in <strong>Terms of service</strong>
 										</label>
-										
+
 									</div>
 
 									<div class="d-flex justify-content-center">

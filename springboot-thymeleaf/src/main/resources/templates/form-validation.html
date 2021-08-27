@@ -22,7 +22,7 @@
 				<input type="text"
 					th:classappend="${#fields.hasErrors('userName') ? 'is-invalid' : ''} "
 					name="userName" th:value="${loginData.userName}"
-					class="form-control" id="exampleInputEmail1"
+					class="form-control is-invalid" id="exampleInputEmail1"
 					aria-describedby="emailHelp" />
 
 				<div th:each="e : ${#fields.errors('userName')}" th:text="${e}"  class="invalid-feedback"></div>
