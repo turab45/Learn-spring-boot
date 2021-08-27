@@ -61,4 +61,9 @@ public class UserController {
 
 		return "register";
 	}
+	
+	@GetMapping("/index")
+	public String userHome() {
+		return "normal/index";
+	}
 }
