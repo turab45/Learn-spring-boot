@@ -6,6 +6,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "contacts")
@@ -13,10 +15,13 @@ public class ContactEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
+	@NotBlank(message = "Contact name can't be empty.")
 	private String name;
+	@Email(regexp = "^[A-Za-z0-9+_.-]+@(.+)$", message = "Must be a well formed email address.")
 	private String email;
 	private String work;
 	private String image;
+	@NotBlank(message = "Contact number can't be empty")
 	private String phone;
 	private String description;
 	
