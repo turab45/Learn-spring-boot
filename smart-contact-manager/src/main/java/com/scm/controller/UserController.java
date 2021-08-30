@@ -1,10 +1,16 @@
 package com.scm.controller;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.security.Principal;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -13,6 +19,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.scm.dao.ContactRepository;
 import com.scm.dao.UserRepository;
@@ -50,22 +57,43 @@ public class UserController {
 	// Add a new contact
 	
 	@PostMapping("/process-contact")
-	public String processContact(@Valid @ModelAttribute("contact") ContactEntity contactEntity, BindingResult result, @RequestParam("lname") String lastName, Model model, Principal principal) {
+	public String processContact(@Valid @ModelAttribute("contact") ContactEntity contactEntity, BindingResult result, @RequestParam("lname") String lastName,@RequestParam("profileImg") MultipartFile file, Model model, Principal principal) {
 		if (result.hasErrors()) {
 			System.out.println(result);
 			model.addAttribute("title", "Add New Contact");
 			model.addAttribute("contact", contactEntity);
 			return "normal/add_contact";
 		}
-		
-		UserEntity userEntity = userRepository.findByEmail(principal.getName());
-		
-		contactEntity.setName(contactEntity.getName()+" "+lastName);
-		contactEntity.setUser(userEntity);
-		
-		userEntity.getContacts().add(contactEntity);
-		
-		//userRepository.save(userEntity);
+		try {
+			
+			if (!file.isEmpty()) {
+				contactEntity.setImage(file.getOriginalFilename());
+				
+				File saveFile = new ClassPathResource("static/img").getFile();
+				
+				
+				Path path = Paths.get(saveFile.getAbsolutePath()+File.separator+file.getOriginalFilename());
+				
+				Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+				
+			}else {
+				contactEntity.setImage("default.jpg");
+			}
+			
+			
+			
+			UserEntity userEntity = userRepository.findByEmail(principal.getName());
+			
+			contactEntity.setName(contactEntity.getName()+" "+lastName);
+			contactEntity.setUser(userEntity);
+			
+			userEntity.getContacts().add(contactEntity);
+			
+			userRepository.save(userEntity);
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 		return "normal/add_contact";
 	}
 }
