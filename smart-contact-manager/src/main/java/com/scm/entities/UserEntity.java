@@ -19,7 +19,7 @@ import javax.validation.constraints.NotBlank;
 public class UserEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+	private Integer userId;
 	@NotBlank(message = "User name can't be null.")
 	private String name;
 	@Column(unique = true)
@@ -31,15 +31,14 @@ public class UserEntity {
 	private String status;
 	private String roll;
 	
-	@OneToMany(cascade = CascadeType.ALL)
-	private List<ContactEntity> contacts;
+
 
 	public Integer getId() {
-		return id;
+		return userId;
 	}
 
 	public void setId(Integer id) {
-		this.id = id;
+		this.userId = id;
 	}
 
 	public String getName() {
@@ -82,13 +81,7 @@ public class UserEntity {
 		this.status = status;
 	}
 
-	public List<ContactEntity> getContacts() {
-		return contacts;
-	}
-
-	public void setContacts(List<ContactEntity> contacts) {
-		this.contacts = contacts;
-	}
+	
 
 
 	public String getRoll() {
@@ -101,8 +94,8 @@ public class UserEntity {
 
 	@Override
 	public String toString() {
-		return "UserEntity [id=" + id + ", name=" + name + ", email=" + email + ", password=" + password + ", image="
-				+ image + ", status=" + status + ", roll=" + roll + ", contacts=" + contacts + "]";
+		return "UserEntity [id=" + userId + ", name=" + name + ", email=" + email + ", password=" + password + ", image="
+				+ image + ", status=" + status + ", roll=" + roll + "]";
 	}
 	
 	

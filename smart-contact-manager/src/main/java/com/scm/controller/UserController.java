@@ -6,6 +6,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.security.Principal;
+import java.util.List;
 
 import javax.validation.Valid;
 
@@ -31,6 +32,8 @@ import com.scm.entities.UserEntity;
 public class UserController {
 	@Autowired
 	private UserRepository userRepository;
+	@Autowired
+	private ContactRepository contactRepository;
 	
 	@GetMapping("/dashboard")
 	public String dashboard(Model model, Principal principal) {
@@ -87,13 +90,28 @@ public class UserController {
 			contactEntity.setName(contactEntity.getName()+" "+lastName);
 			contactEntity.setUser(userEntity);
 			
-			userEntity.getContacts().add(contactEntity);
+			contactRepository.save(contactEntity);
 			
-			userRepository.save(userEntity);
+			model.addAttribute("alertClass", "alert-success");
+			model.addAttribute("message", "Contact has been added successfully.");
+			model.addAttribute("contact", new ContactEntity());
 			
 		} catch (Exception e) {
-			// TODO: handle exception
+			model.addAttribute("alertClass", "alert-danger");
+			model.addAttribute("message", "Something went wrong.");
 		}
 		return "normal/add_contact";
+	}
+	
+	
+	
+	@GetMapping("/contacts")
+	public String viewContacts(Model model, Principal principal) {
+		
+		model.addAttribute("title", "User Contacts");
+		UserEntity userEntity = userRepository.findByEmail(principal.getName());
+		List<ContactEntity> userContacts = contactRepository.findContactsByUser(userEntity.getId());
+		System.out.println(userContacts);
+		return "normal/view_contacts";
 	}
 }

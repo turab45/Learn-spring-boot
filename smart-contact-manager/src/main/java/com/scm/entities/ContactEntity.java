@@ -1,9 +1,11 @@
 package com.scm.entities;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
@@ -26,6 +28,7 @@ public class ContactEntity {
 	private String description;
 	
 	@ManyToOne
+	@JoinColumn(name="userId", nullable=false)
 	private UserEntity user;
 
 	public Integer getId() {
@@ -90,6 +93,12 @@ public class ContactEntity {
 
 	public void setUser(UserEntity user) {
 		this.user = user;
+	}
+
+	@Override
+	public String toString() {
+		return "ContactEntity [id=" + id + ", name=" + name + ", email=" + email + ", work=" + work + ", image=" + image
+				+ ", phone=" + phone + ", description=" + description + ", user=" + user + "]";
 	}
 	
 	
