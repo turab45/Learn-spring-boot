@@ -111,7 +111,8 @@ public class UserController {
 		model.addAttribute("title", "User Contacts");
 		UserEntity userEntity = userRepository.findByEmail(principal.getName());
 		List<ContactEntity> userContacts = contactRepository.findContactsByUser(userEntity.getId());
-		System.out.println(userContacts);
+		
+		model.addAttribute("contacts", userContacts);
 		return "normal/view_contacts";
 	}
 }
