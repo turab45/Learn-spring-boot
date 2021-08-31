@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -17,6 +18,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -114,5 +116,28 @@ public class UserController {
 		
 		model.addAttribute("contacts", userContacts);
 		return "normal/view_contacts";
+	}
+	
+	@GetMapping("/contact/{id}")
+	public String viewSingleContact(@PathVariable("id") Integer id, Model model) {
+		ContactEntity contactEntity = contactRepository.findById(id).get();
+		
+		model.addAttribute("title", contactEntity.getName());
+		model.addAttribute("contact", contactEntity);
+		return "normal/view_single_contact";
+	}
+	
+	
+	@GetMapping("/contact/update/{id}")
+	public String updateContact(@PathVariable("id") Integer id, Model model) {
+		ContactEntity contactEntity = contactRepository.findById(id).get();
+		
+		model.addAttribute("title", contactEntity.getName());
+		model.addAttribute("contact", contactEntity);
+		if (contactEntity.getName().split(" ").length > 1) {
+			model.addAttribute("fname", contactEntity.getName().split(" ")[0]);
+			model.addAttribute("lname", contactEntity.getName().split(" ")[1]);
+		}
+		return "normal/update_contact";
 	}
 }

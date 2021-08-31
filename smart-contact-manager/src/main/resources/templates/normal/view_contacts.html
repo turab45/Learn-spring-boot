@@ -21,11 +21,11 @@
 
 				<div th:each="c : ${contacts}" class="col">
 				
-					<div class="card">
-						<img src="https://mdbootstrap.com/img/new/standard/city/041.jpg"
-							class="card-img-top" alt="..." />
+					<div class="card shadow-sm p-3 mb-5 bg-white rounded">
+						<img src="#" th:src="@{'/img/'+${c.image}}"
+							class="card-img-top profile_image" alt="Contact Image" />
 						<div class="card-body">
-							<h5 th:text="${c.name}" class="card-title" >User Contact</h5>
+							<h5 class="card-title" ><a th:href="@{'/user/contact/'+${c.id}}" th:text="${c.name}"></a></h5>
 							
 								
 							<table style="width: 100%">
@@ -45,7 +45,7 @@
 							
 						</div>
 						<div class="card-footer text-muted">
-							<a th:href="@{/contact}" class="btn bg-primary btn-block text-white" style="background-color: #003153 !important">View Contact</a>
+							<a th:href="@{'/user/contact/delete/'+${c.id}}" class="btn btn-danger btn-block text-white">Delete Contact</a>
 						</div>
 					</div>
 				</div>
