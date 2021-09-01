@@ -29,6 +29,7 @@ import com.scm.dao.ContactRepository;
 import com.scm.dao.UserRepository;
 import com.scm.entities.ContactEntity;
 import com.scm.entities.UserEntity;
+import com.scm.helper.AlertMessage;
 
 @Controller
 @RequestMapping(value = "/user")
@@ -179,8 +180,7 @@ public class UserController {
 			System.out.println("Contact : " + contactEntity);
 			contactRepository.save(contactEntity);
 
-			session.setAttribute("alertClass", "alert-success");
-			session.setAttribute("message", "Contact has been added successfully.");
+			session.setAttribute("alert", new AlertMessage("alert alert-success","Contact has been updated successfully."));
 			
 
 		} catch (Exception e) {
@@ -190,5 +190,38 @@ public class UserController {
 
 		System.out.println("ENDING UPDATE ...");
 		return "redirect:/user/contact/"+contactEntity.getId();
+	}
+	
+	
+	@GetMapping("/profile")
+	public String userProfile(Model model, Principal principal) {
+		UserEntity userEntity = userRepository.findByEmail(principal.getName());
+		
+		model.addAttribute("user", userEntity);
+		model.addAttribute("title", "My Profile");
+		return "normal/profile";
+	}
+	
+	@PostMapping("/profile/update")
+	public String processUpdateProfile(@ModelAttribute("user") UserEntity userEntity, @PathVariable("profileImg") MultipartFile file,HttpSession session) {
+		UserEntity oldUser = userRepository.findById(userEntity.getId()).get();
+		
+		try {
+			if (!file.isEmpty()) {
+				oldUser.setImage(file.getOriginalFilename());
+				
+			}
+			
+			oldUser.setName(userEntity.getName());
+			oldUser.setEmail(userEntity.getEmail());
+			
+			//userRepository.save(oldUser);
+			
+			session.setAttribute("alert", new AlertMessage("alert alert-success","Contact has been updated successfully."));
+		} catch (Exception e) {
+			//session.setAttribute("alert", new AlertMessage("alert alert-danger","Somwthing went wrong."));
+		}
+		
+		return "redirect:/user/profile";
 	}
 }

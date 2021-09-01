@@ -13,7 +13,8 @@
 
 			<div th:if="${contact}" class="col" style="width: 50%; margin: auto;">
 
-				<h5 class="text-center">Contact Details</h5>
+				<div th:if="${session.alert}" th:class="${session.alert.type}" role="alert"
+									th:text="${session.alert.message}"></div>
 
 				<div class="card shadow-sm p-3 mb-5 bg-white rounded">
 				<h5 class="text-center">Contact Details</h5>
