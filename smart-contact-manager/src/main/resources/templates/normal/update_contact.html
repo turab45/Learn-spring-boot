@@ -9,21 +9,25 @@
 
 	<section>
 		<div class="container">
-			<div class="container">
+			<div class="container mb-5">
 				<form novalidate action="#" th:object="${contact}"
 					enctype="multipart/form-data" method="POST"
-					th:action="@{/user/update-contact}"
+					th:action="@{'/user/'+${contact.id}+'/update'}"
 					style="width: 40%; margin: auto;">
 
 					<h1 class="text-center mt-5-custom">Update Contact</h1>
-
-					<div th:class="${'alert '+ alertClass}" role="alert"
-						th:text="${message}"></div>
+					<div class="text-center">
+						<img th:src="@{'/img/'+${contact.image}}" class="" alt="..." style="height: 166px;border-radius: 50%;width: 50%;margin-bottom: 25px;" />
+					</div>
 
 					<!-- 2 column grid layout with text inputs for the first and last names -->
 					<div class="row mb-4">
 						<div class="col">
 							<div class="form-outline">
+							
+							<!-- field to store id -->
+							<input type="text" name="id" th:value="${contact.id}" hidden/>
+							
 								<input type="text" name="name" th:value="${fname}"
 									id="form3Example1" class="form-control"
 									th:classappend="${#fields.hasErrors('name') ? 'is-invalid' : ''} " />
@@ -34,9 +38,9 @@
 						</div>
 						<div class="col">
 							<div class="form-outline">
-								<input type="text" name="lname" th:value="${lname}" id="form3Example2"
-									class="form-control" /> <label class="form-label"
-									for="form3Example2">Last name</label>
+								<input type="text" name="lname" th:value="${lname}"
+									id="form3Example2" class="form-control" /> <label
+									class="form-label" for="form3Example2">Last name</label>
 							</div>
 						</div>
 					</div>
@@ -54,14 +58,15 @@
 
 					<!-- Work input -->
 					<div class="form-outline mb-4">
-						<input type="text" name="work" th:value="${contact.work}" id="form3Example4"
-							class="form-control" /> <label class="form-label"
-							for="form3Example4">Work</label>
+						<input type="text" name="work" th:value="${contact.work}"
+							id="form3Example4" class="form-control" /> <label
+							class="form-label" for="form3Example4">Work</label>
 					</div>
 
 					<!-- Phone input -->
 					<div class="form-outline">
-						<input type="tel" name="phone" th:value="${contact.phone}" id="typePhone" class="form-control"
+						<input type="tel" name="phone" th:value="${contact.phone}"
+							id="typePhone" class="form-control"
 							th:classappend="${#fields.hasErrors('phone') ? 'is-invalid' : ''} " />
 						<div th:each="e : ${#fields.errors('phone')}" th:text="${e}"
 							class="invalid-feedback"></div>
@@ -69,7 +74,8 @@
 					</div>
 					<!-- About input -->
 					<div class="form-outline" style="margin-top: 3rem !important;">
-						<textarea class="form-control" name="description" th:value="${contact.description}" id="textAreaExample" rows="4"></textarea>
+						<textarea class="form-control" name="description"
+							th:value="${contact.description}" id="textAreaExample" rows="4"></textarea>
 						<label class="form-label" for="textAreaExample">About</label>
 					</div>
 
@@ -80,7 +86,7 @@
 
 					<!-- Submit button -->
 					<div class="mt-3">
-						<button type="submit" class="btn btn-primary btn-block mb-4">ADD
+						<button type="submit" class="btn btn-primary btn-block mb-4">UPDATE
 							CONTACT</button>
 					</div>
 
