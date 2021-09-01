@@ -128,6 +128,18 @@ public class UserController {
 	}
 	
 	
+	@GetMapping("/contact/delete/{id}")
+	public String deleteContact(@PathVariable("id") Integer id, Model model) {
+		ContactEntity contactEntity = contactRepository.findById(id).get();
+		
+		contactRepository.delete(contactEntity);
+		
+		model.addAttribute("alertClass", "alert-success");
+		model.addAttribute("message", "Your contact has been deleted.");
+		
+		return "redirect:/user/contacts";
+	}
+	
 	@GetMapping("/contact/update/{id}")
 	public String updateContact(@PathVariable("id") Integer id, Model model) {
 		ContactEntity contactEntity = contactRepository.findById(id).get();
@@ -139,5 +151,52 @@ public class UserController {
 			model.addAttribute("lname", contactEntity.getName().split(" ")[1]);
 		}
 		return "normal/update_contact";
+	}
+	
+	
+	// update-contact
+	
+	@PostMapping("/{id}/update-contact")
+	public String updateContact(@Valid @ModelAttribute("contact") ContactEntity contactEntity, BindingResult result, @RequestParam("lname") String lastName,@RequestParam("profileImg") MultipartFile file, Model model, Principal principal) {
+		if (result.hasErrors()) {
+			System.out.println(result);
+			model.addAttribute("title", "Add New Contact");
+			model.addAttribute("contact", contactEntity);
+			return "normal/add_contact";
+		}
+		try {
+			
+			if (!file.isEmpty()) {
+				contactEntity.setImage(file.getOriginalFilename());
+				
+				File saveFile = new ClassPathResource("static/img").getFile();
+				
+				
+				Path path = Paths.get(saveFile.getAbsolutePath()+File.separator+file.getOriginalFilename());
+				
+				Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+				
+			}else {
+				contactEntity.setImage("default.jpg");
+			}
+			
+			
+			
+			UserEntity userEntity = userRepository.findByEmail(principal.getName());
+			
+			contactEntity.setName(contactEntity.getName()+" "+lastName);
+			contactEntity.setUser(userEntity);
+			
+			contactRepository.save(contactEntity);
+			
+			model.addAttribute("alertClass", "alert-success");
+			model.addAttribute("message", "Contact has been added successfully.");
+			model.addAttribute("contact", new ContactEntity());
+			
+		} catch (Exception e) {
+			model.addAttribute("alertClass", "alert-danger");
+			model.addAttribute("message", "Something went wrong.");
+		}
+		return "normal/add_contact";
 	}
 }
