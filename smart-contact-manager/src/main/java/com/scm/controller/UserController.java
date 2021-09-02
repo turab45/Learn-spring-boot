@@ -203,23 +203,36 @@ public class UserController {
 	}
 	
 	@PostMapping("/profile/update")
-	public String processUpdateProfile(@ModelAttribute("user") UserEntity userEntity, @PathVariable("profileImg") MultipartFile file,HttpSession session) {
+	public String processUpdateProfile(@ModelAttribute("user") UserEntity userEntity, @RequestParam("profileImg") MultipartFile file,@RequestParam("lname") String lName,Model model, HttpSession session) {
 		UserEntity oldUser = userRepository.findById(userEntity.getId()).get();
 		
 		try {
 			if (!file.isEmpty()) {
 				oldUser.setImage(file.getOriginalFilename());
 				
+				File saveFile = new ClassPathResource("static/img/user").getFile();
+
+				Path path = Paths.get(saveFile.getAbsolutePath() + File.separator + file.getOriginalFilename());
+
+				Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+				
 			}
 			
-			oldUser.setName(userEntity.getName());
+			oldUser.setName(userEntity.getName()+" "+lName);
 			oldUser.setEmail(userEntity.getEmail());
 			
-			//userRepository.save(oldUser);
+			userRepository.save(oldUser);
+			
+			if (oldUser.getName().split(" ").length > 1) {
+				model.addAttribute("fname", oldUser.getName().split(" ")[0]);
+				model.addAttribute("lname", oldUser.getName().split(" ")[1]);
+			} else
+				model.addAttribute("fname", oldUser.getName());
 			
 			session.setAttribute("alert", new AlertMessage("alert alert-success","Contact has been updated successfully."));
 		} catch (Exception e) {
-			//session.setAttribute("alert", new AlertMessage("alert alert-danger","Somwthing went wrong."));
+			e.printStackTrace();
+			session.setAttribute("alert", new AlertMessage("alert alert-danger","Somwthing went wrong."));
 		}
 		
 		return "redirect:/user/profile";

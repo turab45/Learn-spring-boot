@@ -42,7 +42,7 @@
 						
 					</div>
 					<div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12" style="padding:25px;">
-						<form th:action="@{/user/profile/update}" method="POST" th:object="${user}">
+						<form th:action="@{/user/profile/update}" method="POST" th:object="${user}" enctype="multipart/form-data">
 							<!-- 2 column grid layout with text inputs for the first and last names -->
 							<div class="row mb-4">
 								<h5 class="text-primary">Personal Details</h5>
@@ -56,7 +56,7 @@
 								</div>
 								<div class="col">
 									<div class="form-outline">
-										<input type="text" name="lname" id="form6Example2" class="form-control" />
+										<input type="text" name="lname" th:value="${lname}" id="form6Example2" class="form-control" />
 										<label class="form-label" for="form6Example2">Last
 											name</label>
 									</div>
