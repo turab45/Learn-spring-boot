@@ -8,9 +8,37 @@ function deleteContact(id) {
 	})
 		.then((willDelete) => {
 			if (willDelete) {
-				window.location = "/user/contact/delete/"+id;
-			} else {
-				swal("Your imaginary file is safe!");
+				window.location = "/user/contact/delete/" + id;
 			}
 		});
+}
+
+function search() {
+
+	var query = $("#search").val();
+
+	if (query == '') {
+		$(".search-result").hide();
+	} else {
+
+		let url = `http://localhost:8080/user/search/${query}`;
+		fetch(url).then(response => {
+			return response.json();
+		}).then(data => {
+
+			let text = `<div class="btn-group">`
+			data.forEach(contact => {
+				text += `<a href="/user/contact/${contact.id}" class="btn btn - light" data-mdb-color="dark">${contact.name}</a>`
+			});
+
+			text += `</div>`
+
+			$(".search-result").html(text);
+
+			$(".search-result").show();
+		});
+
+
+	}
+
 }
