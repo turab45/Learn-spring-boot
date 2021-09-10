@@ -14,6 +14,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -38,6 +39,10 @@ public class UserController {
 	private UserRepository userRepository;
 	@Autowired
 	private ContactRepository contactRepository;
+	
+	@Autowired
+	private BCryptPasswordEncoder bCryptPasswordEncoder;
+	
 
 	@GetMapping("/dashboard")
 	public String dashboard(Model model, Principal principal) {
@@ -241,17 +246,35 @@ public class UserController {
 	
 	@GetMapping("/settings")
 	public String settings() {
+		
+		UserEntity userEntity = userRepository.getById(1);
+		
+		System.out.println(bCryptPasswordEncoder);
+		
 		return "normal/change_password";
 	}
 	
 	@PostMapping("/change_password")
-	public String chnagePassword(@RequestParam("old-password") String oldPassword, @RequestParam("new-password") String newPassword, Principal principal) {
+	public String chnagePassword(@RequestParam("old-password") String oldPassword, @RequestParam("new-password") String newPassword, Principal principal, HttpSession session) {
 		
 		UserEntity user = userRepository.findByEmail(principal.getName());
-		System.out.println(user);
 		
-		System.out.println(oldPassword);
-		System.out.println(newPassword);
-		return "normal/change_password";
+		
+		if (bCryptPasswordEncoder.matches(oldPassword, user.getPassword())) {
+			
+			// change the password
+			
+			user.setPassword(bCryptPasswordEncoder.encode(newPassword));
+			
+			userRepository.save(user);
+			
+			session.setAttribute("alert", new AlertMessage("alert alert-success","Your password has been changed successfully."));
+			
+			return "redirect:/user/settings";
+			
+		}
+		
+		session.setAttribute("alert", new AlertMessage("alert alert-danger","Your password doesn't match old password."));
+		return "redirect:/user/settings";
 	}
 }
