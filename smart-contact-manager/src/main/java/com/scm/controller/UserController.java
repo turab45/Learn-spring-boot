@@ -237,4 +237,21 @@ public class UserController {
 		
 		return "redirect:/user/profile";
 	}
+	
+	
+	@GetMapping("/settings")
+	public String settings() {
+		return "normal/change_password";
+	}
+	
+	@PostMapping("/change_password")
+	public String chnagePassword(@RequestParam("old-password") String oldPassword, @RequestParam("new-password") String newPassword, Principal principal) {
+		
+		UserEntity user = userRepository.findByEmail(principal.getName());
+		System.out.println(user);
+		
+		System.out.println(oldPassword);
+		System.out.println(newPassword);
+		return "normal/change_password";
+	}
 }
