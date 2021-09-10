@@ -1,8 +1,13 @@
 package com.scm.controller;
 
+import java.util.Random;
+
+import javax.persistence.GeneratedValue;
 import javax.validation.Valid;
+import javax.validation.constraints.Digits;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.amqp.RabbitAutoConfiguration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,6 +29,7 @@ public class HomeController {
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
 
+	Random random = new Random(1000);
 	
 	@GetMapping("/")
 	public String home(Model model) {
@@ -83,5 +89,25 @@ public class HomeController {
 	@GetMapping("/signin")
 	public String login() {
 		return "login";
+	}
+	
+	@GetMapping("/forgot-password")
+	public String forgotPassword(Model model) {
+		
+		model.addAttribute("title", "Forgot password");
+		return "forgot_password";
+	}
+	
+	@PostMapping("/send-otp")
+	public String sendOTP(@RequestParam("email") String email ,Model model) {
+		
+		/* GeneratedValue 5 Digits otp */
+		
+		int otp = random.nextInt(99999);
+		
+		System.out.println(otp);
+		
+		model.addAttribute("title", "Verify OTP");
+		return "verify_otp";
 	}
 }
