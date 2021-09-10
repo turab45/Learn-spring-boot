@@ -42,3 +42,27 @@ function search() {
 	}
 
 }
+
+
+
+
+
+
+
+
+
+// confirm passwords
+
+function confirmPasswords() {
+	var pass = $("#pass").val();
+
+	var confPass = $("#conf-pass").val();
+
+	if (confPass == pass) {
+		$("#verify-btn").removeAttr("disabled");
+
+	} else {
+		$("#verify-btn").attr("disabled", true);
+	}
+
+}

@@ -18,6 +18,9 @@
 					Invalid username and password.
 				</div>
 				
+				<div th:if="${session.alert}" th:class="${session.alert.type}"
+					role="alert" th:text="${session.alert.message}"></div>
+				
 				<div th:if="${param.logout}" class="alert alert-success">
 					You have been successfully logged out.
 				</div>

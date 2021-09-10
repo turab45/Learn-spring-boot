@@ -51,3 +51,9 @@ body {
     color: black;
     display: none;
 }
+
+
+#conf-pass.focus{
+	border: 1px solid red !important;
+	color: red !important;
+}

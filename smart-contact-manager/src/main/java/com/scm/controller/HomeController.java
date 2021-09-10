@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.scm.dao.UserRepository;
 import com.scm.entities.UserEntity;
+import com.scm.helper.AlertMessage;
 import com.scm.service.MailSenderService;
 
 @Controller
@@ -105,17 +106,26 @@ public class HomeController {
 	@PostMapping("/send-otp")
 	public String sendOTP(@RequestParam("email") String email ,Model model, HttpSession session) {
 		
-		/* GeneratedValue 5 Digits otp */
+		UserEntity userEntity = userRepository.findByEmail(email);
 		
-		String otp= new Random().nextInt(999999)+"";
+		if (userEntity != null) {
+			/* GeneratedValue 5 Digits otp */
+			
+			String otp= new Random().nextInt(999999)+"";
+			
+			mailSenderService.sendSimpleEmail(email, "Your OTP", "Here is your one time password for forgot password "+otp);
+			
+			
+			model.addAttribute("title", "Verify OTP");
+			session.setAttribute("otp", otp);
+			session.setAttribute("alert", new AlertMessage("alert alert-success","We have sent a 5 digit OTP to your registered email address. Please verify it."));
+			session.setAttribute("user", userEntity);
+			return "verify_otp";
+		}
 		
-		mailSenderService.sendSimpleEmail(email, "Your OTP", "Here is your one time password for forgot password "+otp);
+		session.setAttribute("alert", new AlertMessage("alert alert-danger","Looks like this email is not registered. Please enter your correct email address or sign up."));
+		return "redirect:/forgot-password";
 		
-		System.out.println(otp);
-		
-		model.addAttribute("title", "Verify OTP");
-		session.setAttribute("otp", otp);
-		return "verify_otp";
 	}
 	
 	@PostMapping("/verify-otp")
@@ -126,7 +136,18 @@ public class HomeController {
 			System.out.println("OTP verified successfully.");
 			return "change_password";
 		}
-		System.out.println("wrong otp....");
+		session.setAttribute("alert", new AlertMessage("alert alert-danger","Your entered OTP doesn't match. Plese enter the correct one."));
 		return "verify_otp";
+	}
+	
+	@PostMapping("/change-password")
+	public String chagePassword(@RequestParam("password") String password,HttpSession session) {
+		UserEntity userEntity = (UserEntity) session.getAttribute("user");
+		
+		userEntity.setPassword(passwordEncoder.encode(password));
+		userRepository.save(userEntity);
+		
+		session.setAttribute("alert", new AlertMessage("alert alert-success","Your password has been changed successfully."));
+		return "redirect:/signin";
 	}
 }
