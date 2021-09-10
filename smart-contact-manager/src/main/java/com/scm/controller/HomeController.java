@@ -3,6 +3,7 @@ package com.scm.controller;
 import java.util.Random;
 
 import javax.persistence.GeneratedValue;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import javax.validation.constraints.Digits;
 
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.scm.dao.UserRepository;
 import com.scm.entities.UserEntity;
+import com.scm.service.MailSenderService;
 
 @Controller
 public class HomeController {
@@ -28,6 +30,8 @@ public class HomeController {
 	private UserRepository userRepository;
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
+	@Autowired
+	private MailSenderService mailSenderService;
 
 	Random random = new Random(1000);
 	
@@ -99,15 +103,30 @@ public class HomeController {
 	}
 	
 	@PostMapping("/send-otp")
-	public String sendOTP(@RequestParam("email") String email ,Model model) {
+	public String sendOTP(@RequestParam("email") String email ,Model model, HttpSession session) {
 		
 		/* GeneratedValue 5 Digits otp */
 		
-		int otp = random.nextInt(99999);
+		String otp= new Random().nextInt(999999)+"";
+		
+		mailSenderService.sendSimpleEmail(email, "Your OTP", "Here is your one time password for forgot password "+otp);
 		
 		System.out.println(otp);
 		
 		model.addAttribute("title", "Verify OTP");
+		session.setAttribute("otp", otp);
+		return "verify_otp";
+	}
+	
+	@PostMapping("/verify-otp")
+	public String verifyOTP(@RequestParam("otp") String otp, HttpSession session) {
+		String oldOtp = (String) session.getAttribute("otp");
+		
+		if (otp.equals(oldOtp)) {
+			System.out.println("OTP verified successfully.");
+			return "change_password";
+		}
+		System.out.println("wrong otp....");
 		return "verify_otp";
 	}
 }
